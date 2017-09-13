@@ -1,0 +1,43 @@
+<template>
+	<div>
+		Component B with value:<span id="value"></span>
+	</div>
+</template>
+
+<script>
+(function() {
+	var frag = (document.currentScript||document._currentScript).ownerDocument.querySelector('template').content;
+	var _template = frag.children[0];
+
+	// Class for `<comp-b>`
+	class CompB extends HTMLElement {
+		constructor() {
+			super();
+			console.log("ComponentB constuctor");
+
+			var rootEl = this.attachShadow({mode: 'open'});
+			rootEl.appendChild(_template.cloneNode(true));
+
+			this.value = this.getAttribute('value') || '';
+		}
+
+		connectedCallback() {
+			console.log("ComponentB connectedCallback");
+		}
+		disconnectedCallback() {
+			console.log("ComponentB disconnectedCallback");
+		}
+
+		get value() {
+			return this._value;
+		}
+		set value(value) {
+			this._value = value;
+			this.shadowRoot.querySelector('#value').textContent = value;
+		}
+	}
+
+	// Define our web component
+	customElements.define('comp-b', CompB);
+})();
+</script>

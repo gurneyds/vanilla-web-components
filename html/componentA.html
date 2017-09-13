@@ -1,0 +1,47 @@
+<link rel="import" href="componentA.html"/>
+<template>
+	<div class="comp-a">
+		Component A with a value: <span id="value"></span>
+		<comp-b value="Component B"/>
+	</div>
+</template>
+
+<script>
+(function() {
+	var frag = (document.currentScript||document._currentScript).ownerDocument.querySelector('template').content;
+	var _template = frag.children[0]
+
+	class CompA extends HTMLElement {
+		constructor() {
+			super();
+			console.log("ComponentA constuctor");
+
+			var rootEl = this.attachShadow({mode: 'open'});
+			rootEl.appendChild(_template.cloneNode(true));
+			this.value = this.getAttribute("value") || 0;
+		}
+
+		connectedCallback() {
+			console.log("ComponentA connectedCallback");
+			var compB = this.shadowRoot.querySelector('comp-b');
+			compB.title = "title from compA";
+		}
+		disconnectedCallback() {
+			console.log("ComponentA disconnectedCallback");
+		}
+
+		get value() {
+			return this._value;
+		}
+		set value(value) {
+			this._value = value;
+			this.shadowRoot.querySelector('#value').textContent = value;
+			var compB = this.shadowRoot.querySelector('comp-b');
+			compB.values = value;
+		}
+	}
+
+	// Define our web component
+	customElements.define('comp-a', CompA);
+})();
+</script>

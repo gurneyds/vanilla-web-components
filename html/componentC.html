@@ -1,0 +1,56 @@
+<link rel="import" href="componentD.html"/>
+<template>
+	<div>
+		Component C with a value: <span id="value"></span>
+		<!-- Component d will go here -->
+		<div id="compD"></div>
+	</div>
+</template>
+
+<script>
+(function() {
+	var frag = (document.currentScript||document._currentScript).ownerDocument.querySelector('template').content;
+	var _template = frag.children[0]
+
+	class CompC extends HTMLElement {
+		constructor() {
+			super();
+			console.log("ComponentC constuctor");
+
+			var rootEl = this.attachShadow({mode: 'open'});
+			rootEl.appendChild(_template.cloneNode(true));
+
+			// Construct the sub-component here rather than depending on the template
+			var compD = document.createElement('comp-d');
+			rootEl.querySelector('#compD').appendChild(compD);
+
+			// Setting this value will cause component D to be updated
+			this.value = this.getAttribute("value") || 0;
+		}
+
+		connectedCallback() {
+			console.log("ComponentC connectedCallback");
+			var compC = this.shadowRoot.querySelector('div');
+			compC.title = "title from compC";
+		}
+		disconnectedCallback() {
+			console.log("ComponentC disconnectedCallback");
+		}
+
+		get value() {
+			return this._value;
+		}
+		set value(value) {
+			this._value = value;
+			this.shadowRoot.querySelector('#value').textContent = value;
+
+			// Forward the information to the sub-component
+			var compD = this.shadowRoot.querySelector('comp-d');
+			compD.value = value;
+		}
+	}
+
+	// Define our web component
+	customElements.define('comp-c', CompC);
+})();
+</script>
