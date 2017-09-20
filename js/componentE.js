@@ -2,6 +2,7 @@
 	var template = `
 		<div>
 			Component E with a value: <span id="value"></span>
+			<comp-f></comp-f>
 		</div>
 	`;
 
@@ -16,8 +17,6 @@
 		connectedCallback() {
 			console.log("ComponentE connectedCallback");
 			this.value = this.getAttribute('value') || 0;
-			// var compB = this.shadowRoot.querySelector('comp-b');
-			// compB.title = "title from compA";
 		}
 		disconnectedCallback() {
 			console.log("ComponentE disconnectedCallback");
@@ -29,8 +28,10 @@
 		set value(value) {
 			this._value = value;
 			this.shadowRoot.querySelector('#value').textContent = value;
-			// var compB = this.shadowRoot.querySelector('comp-b');
-			// compB.values = value;
+
+			// Pass the information to the sub-component
+			var compF = this.shadowRoot.querySelector('comp-f');
+			compF.value = this.value;
 		}
 	}
 
