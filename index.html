@@ -42,11 +42,11 @@
 	</div>
 
 	<div id="container3" class="demo">
-		<h1>Dynamic JS based component</h1>
+		<h1>Dynamic JS based component - sub-component in parent template</h1>
 	</div>
 
 	<div id="container4" class="demo">
-		<h1>Dynamic JS based component - property called before insert should be reflected in sub-component</h1>
+		<h1>Dynamic JS based component - property called before document.appendChild() should be reflected in sub-component</h1>
 	</div>
 
 	<script>
@@ -62,9 +62,9 @@
 		// We would expect this value to make it into the sub-component - and it does
 		compC.value = "George";
 
-		// var compE = document.createElement('comp-e');
-		// document.querySelector('#container3').appendChild(compE);
-		// compE.value = "Henry";
+		var compE = document.createElement('comp-e');
+		document.querySelector('#container3').appendChild(compE);
+		compE.value = "Henry";
 
 		var compE2 = document.createElement('comp-e');
 		compE2.value = "This was set before insert";
