@@ -64,8 +64,7 @@
 
 			// If there is a url, then go fetch the data and display it
 			if(this._url) {
-				var client = new HttpClient();
-				client.get(this._url, this._successCallback(this), this._failCallback(this));
+				this._fetchData();
 			} else {
 				// Use the attributes
 				var data = {
@@ -75,6 +74,11 @@
 				};
 				this._render(data);
 			}
+		}
+
+		_fetchData() {
+			var client = new HttpClient();
+			client.get(this._url, this._successCallback(this), this._failCallback(this));
 		}
 
 		disconnectedCallback() {
@@ -98,6 +102,49 @@
 				outer.shadowRoot.querySelector('.container').style.display = "none";
 				outer.shadowRoot.querySelector('.error').style.display = "block";
 				outer.shadowRoot.querySelector('.error-message').textContent = " URL=" + response.responseURL + " with status " + response.status + " ==>" + response.statusText;
+			}
+		}
+
+		get id() {
+			return this._id || '';
+		}
+
+		set id(id) {
+			this._id = id;
+		}
+
+		get user() {
+			return this._user || '';
+		}
+
+		set user(user) {
+			this._user = user;
+		}
+
+		get role() {
+			return this._role || '';
+		}
+
+		set role(role) {
+			this._role = role;
+		}
+
+		static get observedAttributes() { return ['id', 'user', 'role', 'url'] };
+
+		attributeChangedCallback(name, oldValue, newValue) {
+			if(name === 'url') {
+				this._url = newValue;
+				this._fetchData();
+			} else {
+				// Set the new value
+				this['_' + name] = newValue;
+
+				var data = {
+					id: this.id,
+					user: this.user,
+					role: this.role
+				};
+				this._render(data);
 			}
 		}
 
