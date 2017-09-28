@@ -147,25 +147,6 @@
 				this._render(data);
 			}
 		}
-
-		get value() {
-			return this._value;
-		}
-		set value(value) {
-			this._value = value;
-
-			// Rule #6 The connectedCallback may not have been called at this point, so be sure and check (ie If the shadowRoot is present then we know that the connectedCallback has been called)
-			// It is possible that this could be called before the connected callback sets up the sub-components, so
-			// protect it by looking at the shadowRoot. If the shadowRoot is there, then we would expect the
-			// sub-component to also be there.
-			if(this.shadowRoot) {
-				this.shadowRoot.querySelector('#value').textContent = value;
-
-				// Pass the information to the sub-component
-				var compF = this.shadowRoot.querySelector('comp-f');
-				compF.value = this.value + '-child';
-			}
-		}
 	}
 
 	// Define our web component
