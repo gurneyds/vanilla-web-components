@@ -6,9 +6,6 @@
 			display: grid;
 			grid-template-columns: 1fr;
 		}
-		.url-contents {
-			border: 1px solid red;
-		}
 		.error {
 			color: red;
 			border: 1px solid red;
@@ -57,28 +54,20 @@
 		}
 
 		connectedCallback() {
-			this._id = this.getAttribute('id');
-			this._user = this.getAttribute('user');
-			this._role = this.getAttribute('role');
-			this._url = this.getAttribute('url');
+			this.id = this.getAttribute('id');
+			this.user = this.getAttribute('user');
+			this.role = this.getAttribute('role');
+			this.src = this.getAttribute('src');
 
-			// If there is a url, then go fetch the data and display it
-			if(this._url) {
+			// If there is a src, then go fetch the data and display it
+			if(this._src) {
 				this._fetchData();
-			} else {
-				// Use the attributes
-				var data = {
-					id: this._id,
-					user: this._user,
-					role: this._role
-				};
-				this._render(data);
 			}
 		}
 
 		_fetchData() {
 			var client = new HttpClient();
-			client.get(this._url, this._successCallback(this), this._failCallback(this));
+			client.get(this._src, this._successCallback(this), this._failCallback(this));
 		}
 
 		disconnectedCallback() {
@@ -87,14 +76,13 @@
 		_successCallback(outer) {
 			return function(response) {
 				// TODO - Take a look at the response to see if it is the correct type and will convert to JSON
-				outer._render(JSON.parse(response.responseText));
-			}
-		}
+				var data = JSON.parse(response.responseText);
 
-		_render(data) {
-			this.shadowRoot.querySelector('.id').textContent = data.id;
-			this.shadowRoot.querySelector('.user').textContent = data.user;
-			this.shadowRoot.querySelector('.role').textContent = data.role;
+				// The setters will update the ui
+				outer.id = data.id;
+				outer.user = data.user;
+				outer.role = data.role;
+			}
 		}
 
 		_failCallback(outer) {
@@ -111,6 +99,8 @@
 
 		set id(id) {
 			this._id = id;
+			this.shadowRoot.querySelector('.id').textContent = id;
+			this.setAttribute('id', id);
 		}
 
 		get user() {
@@ -119,6 +109,8 @@
 
 		set user(user) {
 			this._user = user;
+			this.shadowRoot.querySelector('.user').textContent = user;
+			this.setAttribute('user', user);
 		}
 
 		get role() {
@@ -127,24 +119,31 @@
 
 		set role(role) {
 			this._role = role;
+			this.shadowRoot.querySelector('.role').textContent = role;
+			this.setAttribute('role', role);
 		}
 
-		static get observedAttributes() { return ['id', 'user', 'role', 'url'] };
+		get src() {
+			return this._src;
+		}
+
+		set src(src) {
+			this._src = src;
+			this.setAttribute('src', src);
+		}
+
+		static get observedAttributes() { return ['id', 'user', 'role', 'src'] };
 
 		attributeChangedCallback(name, oldValue, newValue) {
-			if(name === 'url') {
-				this._url = newValue;
-				this._fetchData();
-			} else {
-				// Set the new value
-				this['_' + name] = newValue;
-
-				var data = {
-					id: this.id,
-					user: this.user,
-					role: this.role
-				};
-				this._render(data);
+			// If an attribute is null it gets converted into the string 'null'. That seems so wrong, but it's reality.
+			if(newValue != oldValue && newValue && newValue != 'null') {
+				if(name === 'src') {
+					this._src = newValue;
+					this._fetchData();
+				} else {
+					// Set the new value
+					this[name] = newValue;
+				}
 			}
 		}
 	}
