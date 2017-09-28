@@ -26,20 +26,20 @@
 		</div>
 	`;
 
-	// Helper function to get a url
-	var HttpClient = function() {
-		this.get = function(url, successCallback, failCallback) {
-			var request = new XMLHttpRequest();
-			request.onreadystatechange = function() {
-				if (request.readyState == 4 && request.status == 200 && successCallback) {
-					successCallback(request);
-				} else if(request.readyState == 4 && request.status != 200 && failCallback) {
-					failCallback(request);
-				}
+	function getData(url, successCallback, failCallback) {
+		fetch(url).then(function(response) {
+			var contentType = response.headers.get("content-type");
+			if(response.status === 200 && contentType && contentType.includes("application/json") && successCallback) {
+				response.json().then(function(data){
+					successCallback(data);
+				});
+			} else {
+				failCallback(response);
 			}
-			request.open( "GET", url, true );
-			request.send( null );
-		}
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
 	}
 
 	/*
@@ -66,18 +66,14 @@
 		}
 
 		_fetchData() {
-			var client = new HttpClient();
-			client.get(this._src, this._successCallback(this), this._failCallback(this));
+			getData(this._src, this._successCallback(this), this._failCallback(this));
 		}
 
 		disconnectedCallback() {
 		}
 
 		_successCallback(outer) {
-			return function(response) {
-				// TODO - Take a look at the response to see if it is the correct type and will convert to JSON
-				var data = JSON.parse(response.responseText);
-
+			return function(data) {
 				// The setters will update the ui
 				outer.id = data.id;
 				outer.user = data.user;
