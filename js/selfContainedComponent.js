@@ -9,24 +9,35 @@
 		.url-contents {
 			border: 1px solid red;
 		}
+		.error {
+			color: red;
+			border: 1px solid red;
+			font-weight: bold;
+			font-size: 200%;
+		}
 	</style>
 	`;
 
 	var _template = `
+		<div class="error" style="display:none">
+			An error has occurred ==> <span class="error-message"></span>
+		</div>
 		<div class="container">
-			<div class="id">1234</div>
-			<div class="user">Frank</div>
-			<div class="role">Typist</div>
+			<div class="id"></div>
+			<div class="user"></div>
+			<div class="role"></div>
 		</div>
 	`;
 
 	// Helper function to get a url
 	var HttpClient = function() {
-		this.get = function(url, callback) {
+		this.get = function(url, successCallback, failCallback) {
 			var request = new XMLHttpRequest();
 			request.onreadystatechange = function() {
-				if (request.readyState == 4 && request.status == 200 && callback) {
-					callback(request.responseText);
+				if (request.readyState == 4 && request.status == 200 && successCallback) {
+					successCallback(request);
+				} else if(request.readyState == 4 && request.status != 200 && failCallback) {
+					failCallback(request);
 				}
 			}
 			request.open( "GET", url, true );
@@ -46,26 +57,48 @@
 		}
 
 		connectedCallback() {
+			this._id = this.getAttribute('id');
+			this._user = this.getAttribute('user');
+			this._role = this.getAttribute('role');
 			this._url = this.getAttribute('url');
 
 			// If there is a url, then go fetch the data and display it
 			if(this._url) {
 				var client = new HttpClient();
-				client.get(this._url, this._render(this));
+				client.get(this._url, this._successCallback(this), this._failCallback(this));
+			} else {
+				// Use the attributes
+				var data = {
+					id: this._id,
+					user: this._user,
+					role: this._role
+				};
+				this._render(data);
 			}
 		}
 
 		disconnectedCallback() {
 		}
 
-		_render(outer) {
-			function _innerRender(response) {
-				var data = JSON.parse(response);
-				outer.shadowRoot.querySelector('.id').textContent = data.id;
-				outer.shadowRoot.querySelector('.user').textContent = data.user;
-				outer.shadowRoot.querySelector('.role').textContent = data.role;
+		_successCallback(outer) {
+			return function(response) {
+				// TODO - Take a look at the response to see if it is the correct type and will convert to JSON
+				outer._render(JSON.parse(response.responseText));
 			}
-			return _innerRender;
+		}
+
+		_render(data) {
+			this.shadowRoot.querySelector('.id').textContent = data.id;
+			this.shadowRoot.querySelector('.user').textContent = data.user;
+			this.shadowRoot.querySelector('.role').textContent = data.role;
+		}
+
+		_failCallback(outer) {
+			return function(response) {
+				outer.shadowRoot.querySelector('.container').style.display = "none";
+				outer.shadowRoot.querySelector('.error').style.display = "block";
+				outer.shadowRoot.querySelector('.error-message').textContent = " URL=" + response.responseURL + " with status " + response.status + " ==>" + response.statusText;
+			}
 		}
 
 		get value() {
