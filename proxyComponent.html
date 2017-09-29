@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Proxy Component</title>
+		<link rel="stylesheet" href="css/familysearch-styles.css"/>
+		<style>
+			.demo {
+				margin-top:30px;
+				border:1px solid black;
+			}
+		</style>
+
+		<script src="js/proxyComponent.js"></script>
+		<script src="js/simpleComponent.js"></script>
+	</head>
+	<body>
+	<div class="demo">
+		<h1>Proxy Component Example</h1>
+		<h4>The proxy component fetches the data and hands it to the sub-component</h4>
+
+		<proxy-component src="data/mockData1.json">
+			<div slot="slot1">
+				<simple-component id="1" user="Bob" role="Manager"/>
+			</div>
+			<div slot="slot2">
+				<simple-component id="2" user="George" role="Developer"/>
+			</div>
+			<div slot="slot3">
+				<simple-component id="3" user="Henry" role="QA"/>
+			</div>
+		</proxy-component>
+	</div>
+</body>
+</html>
