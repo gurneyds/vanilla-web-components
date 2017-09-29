@@ -79,12 +79,19 @@
 			this.setAttribute('role', role);
 		}
 
-		// get data() {
-		// 	return this._data;
-		// }
+		// This is a callback method that call by anyone wishing to set the data
 		set componentData(data) {
+			console.log("componentData caleld on SimpleComponent");
 			this._data = data;
-			console.log("SimpleComponent set data method called with:" + JSON.stringify(data));
+			this.id = data.id;
+			this.user = data.user;
+			this.role = data.role;
+		}
+
+		// This is to demonstrate the ability to use alternate properties
+		set objectData(data) {
+			console.log("objectData called on SimpleComponent");
+			this.componentData(data);
 		}
 
 		static get observedAttributes() { return ['id', 'user', 'role'] };
