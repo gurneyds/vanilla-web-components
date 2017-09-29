@@ -91,7 +91,7 @@
 		// This is to demonstrate the ability to use alternate properties
 		set objectData(data) {
 			console.log("objectData called on SimpleComponent");
-			this.componentData(data);
+			this.componentData = data;
 		}
 
 		static get observedAttributes() { return ['id', 'user', 'role'] };

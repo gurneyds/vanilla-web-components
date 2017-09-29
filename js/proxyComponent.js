@@ -95,6 +95,11 @@
 			this.src = this.getAttribute('src');
 			this._callbackNames = (this.getAttribute('callbackNames') || '').split(',');
 
+			// Trim any whitespace
+			this._callbackNames = this._callbackNames.map(function(name){
+				return name.trim();
+			});
+
 			// Use a timeout because the slot components haven't been created yet
 			// This will also fetch the data if a src attribute was provided
 			setTimeout(prepareForWalk(this), 1);
