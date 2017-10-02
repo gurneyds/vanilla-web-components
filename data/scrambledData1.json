@@ -1,0 +1,26 @@
+{
+	"person": {
+		"id": 1,
+		"name": "Bob-scrambled",
+		"role": "Architect-scrambled",
+		"addresses": [
+			{
+				"street": "1234 MyWay",
+				"city": "Anywhere",
+				"state": "California",
+				"zip": "90210"
+			}
+		],
+		"details" : {
+			"phone": {
+				"home": "(123) 456-7890",
+				"office": "(987) 6545-3210",
+				"cell": "(800) 555-6767"
+			}
+		},
+		"online": {
+			"emailAddress": "john@doe.com",
+			"website": "www.johndoe.com"
+		}
+	}
+}

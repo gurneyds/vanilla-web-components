@@ -56,7 +56,6 @@
 		}
 
 		set homePhone(homePhone) {
-			this._homePhone = homePhone;
 			this.shadowRoot.querySelector('.home-phone').textContent = homePhone;
 			this.setAttribute('homePhone', homePhone);
 		}
@@ -66,7 +65,6 @@
 		}
 
 		set officePhone(officePhone) {
-			this._officePhone = officePhone;
 			this.shadowRoot.querySelector('.office-phone').textContent = officePhone;
 			this.setAttribute('officePhone', officePhone);
 		}
@@ -76,7 +74,6 @@
 		}
 
 		set cellPhone(cellPhone) {
-			this._cellPhone = cellPhone;
 			this.shadowRoot.querySelector('.cell-phone').textContent = cellPhone;
 			this.setAttribute('cellPhone', cellPhone);
 		}
@@ -86,7 +83,6 @@
 		}
 
 		set email(email) {
-			this._email = email;
 			this.shadowRoot.querySelector('.email').textContent = email;
 			this.setAttribute('email', email);
 		}

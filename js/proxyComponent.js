@@ -112,16 +112,18 @@
 
 		_successCallback(outer) {
 			return function(data) {
-				if(outer._callbackNames && outer._callbackNames.length > 0) {
-					// Forward the information to the sub-components
-					outer._callbackNames.forEach(function(name){
-						if(outer._listeners && outer._listeners[name]){
-							outer._listeners[name].forEach(function(listener){
-								listener[name] = data;
-							})
-						}
-					});
-				}
+				// Emit an event for anyone interested in this data
+				var event = new CustomEvent("data-received",{
+					detail:data,
+					bubbles: true,
+					cancelable: true
+				});
+				if(outer.dispatchEvent(event)) {
+					// This will send the original data - not the transformed data
+					outer._notifyListeners(data);
+				}//else {
+					// The intercepter will call set the transformed data by calling the data property
+				//}
 			}
 		}
 
@@ -133,12 +135,30 @@
 			}
 		}
 
+		// Send the data to the listeners
+		_notifyListeners(data) {
+			if(this._callbackNames && this._callbackNames.length > 0) {
+				var that = this;
+				// Forward the information to the sub-components
+				this._callbackNames.forEach(function(name){
+					if(that._listeners && that._listeners[name]){
+						that._listeners[name].forEach(function(listener){
+							listener[name] = data;
+						})
+					}
+				});
+			}
+		}
+
+		set data(data) {
+			this._notifyListeners(data);
+		}
+
 		get src() {
 			return this._src;
 		}
 
 		set src(src) {
-			this._src = src;
 			this.setAttribute('src', src);
 		}
 

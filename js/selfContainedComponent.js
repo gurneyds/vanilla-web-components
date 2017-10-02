@@ -94,7 +94,6 @@
 		}
 
 		set id(id) {
-			this._id = id;
 			this.shadowRoot.querySelector('.id').textContent = id;
 			this.setAttribute('id', id);
 		}
@@ -104,7 +103,6 @@
 		}
 
 		set user(user) {
-			this._user = user;
 			this.shadowRoot.querySelector('.user').textContent = user;
 			this.setAttribute('user', user);
 		}
@@ -114,7 +112,6 @@
 		}
 
 		set role(role) {
-			this._role = role;
 			this.shadowRoot.querySelector('.role').textContent = role;
 			this.setAttribute('role', role);
 		}
@@ -124,7 +121,6 @@
 		}
 
 		set src(src) {
-			this._src = src;
 			this.setAttribute('src', src);
 		}
 

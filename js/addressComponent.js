@@ -56,7 +56,6 @@
 		}
 
 		set street(street) {
-			this._street = street;
 			this.shadowRoot.querySelector('.street').textContent = street;
 			this.setAttribute('street', street);
 		}
@@ -66,7 +65,6 @@
 		}
 
 		set city(city) {
-			this._city = city;
 			this.shadowRoot.querySelector('.city').textContent = city;
 			this.setAttribute('city', city);
 		}
@@ -76,7 +74,6 @@
 		}
 
 		set state(state) {
-			this._state = state;
 			this.shadowRoot.querySelector('.state').textContent = state;
 			this.setAttribute('state', state);
 		}
@@ -86,7 +83,6 @@
 		}
 
 		set zip(zip) {
-			this._zip = zip;
 			this.shadowRoot.querySelector('.zip').textContent = zip;
 			this.setAttribute('zip', zip);
 		}

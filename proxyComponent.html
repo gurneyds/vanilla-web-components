@@ -57,6 +57,19 @@
 		</div>
 
 		<br/>
+		<h4>Data transformation example</h4>
+		<div class="demo-container">
+			<!-- The event interceptor at the bottom transforms this data into usable data -->
+			<proxy-component src="data/scrambledData1.json" callbackNames="person, address, contact">
+				<div class="person-container">
+					<person-component></person-component>
+					<address-component></address-component>
+					<contact-component></contact-component>
+				</div>
+			</proxy-component>
+		</div>
+
+		<br/>
 		<h4>Stand alone component using attribute data</h4>
 		<div class="demo-container">
 			<div class="person-container">
@@ -67,5 +80,6 @@
 		</div>
 
 	</div>
+	<script src="js/eventInterceptor.js"></script>
 </body>
 </html>

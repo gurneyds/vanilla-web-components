@@ -58,7 +58,6 @@
 		}
 
 		set id(id) {
-			this._id = id;
 			this.shadowRoot.querySelector('.id').textContent = id;
 			this.setAttribute('id', id);
 		}
@@ -68,7 +67,6 @@
 		}
 
 		set user(user) {
-			this._user = user;
 			this.shadowRoot.querySelector('.user').textContent = user;
 			this.setAttribute('user', user);
 		}
@@ -78,14 +76,12 @@
 		}
 
 		set role(role) {
-			this._role = role;
 			this.shadowRoot.querySelector('.role').textContent = role;
 			this.setAttribute('role', role);
 		}
 
-		// This is a callback method that call by anyone wishing to set the data
+		// This is a callback method that can be called by anyone wishing to set the data
 		set person(data) {
-			console.log("componentData caleld on PersonComponent");
 			this._data = data;
 			this.id = data.id;
 			this.user = data.user;
@@ -94,7 +90,6 @@
 
 		// This is to demonstrate the ability to use alternate properties
 		set objectData(data) {
-			console.log("objectData called on PersonComponent");
 			this.componentData = data;
 		}
 
