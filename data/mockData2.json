@@ -1,5 +1,21 @@
 {
 	"id": 2,
 	"user": "George",
-	"role": "Developer"
+	"role": "Developer",
+	"address": {
+		"street": "567 Recursive Dr",
+		"city": "Anywhere",
+		"state": "California",
+		"zip": "90210"
+	},
+	"contact" : {
+		"phone": {
+			"home": "(123) 456-7890",
+			"office": "(987) 6545-3210",
+			"cell": "(800) 555-6767"
+		},
+		"email": "john@doe.com",
+		"web": "www.johndoe.com"
+	}
+
 }

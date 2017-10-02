@@ -4,9 +4,7 @@
 		An error has occurred ==> <span class="error-message"></span>
 	</div>
 	<div class="container">
-		<slot name="slot1"></slot>
-		<slot name="slot2"></slot>
-		<slot name="slot3"></slot>
+		<slot></slot>
 	</div>
 	`;
 

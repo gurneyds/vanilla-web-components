@@ -5,6 +5,10 @@
 			border: 1px solid blue;
 			display: grid;
 			grid-template-columns: 1fr;
+			margin:10px;
+		}
+		.container > div {
+			margin-left: 5px;
 		}
 		.error {
 			color: red;
@@ -20,26 +24,26 @@
 			An error has occurred ==> <span class="error-message"></span>
 		</div>
 		<div class="container">
-			<div class="id"></div>
-			<div class="user"></div>
-			<div class="role"></div>
+			<div>ID:<span class="id"></span></div>
+			<div>User:<span class="user"></span></div>
+			<div>Role:<span class="role"></span></div>
 		</div>
 	`;
 
 	/*
 	This is a simple component that renders attribute values and allows an external source to set data properties
 	*/
-	class SimpleComponent extends HTMLElement {
+	class PersonComponent extends HTMLElement {
 		constructor() {
 			super();
-			console.log("SimpleComponent constructor called");
+			console.log("PersonComponent constructor called");
 
 			const template = _styles + _template;
 			this.attachShadow({mode: 'open'}).innerHTML = template;
 		}
 
 		connectedCallback() {
-			console.log("SimpleComponent connected callback called");
+			console.log("PersonComponent connected callback called");
 			this.id = this.getAttribute('id');
 			this.user = this.getAttribute('user');
 			this.role = this.getAttribute('role');
@@ -80,8 +84,8 @@
 		}
 
 		// This is a callback method that call by anyone wishing to set the data
-		set componentData(data) {
-			console.log("componentData caleld on SimpleComponent");
+		set person(data) {
+			console.log("componentData caleld on PersonComponent");
 			this._data = data;
 			this.id = data.id;
 			this.user = data.user;
@@ -90,7 +94,7 @@
 
 		// This is to demonstrate the ability to use alternate properties
 		set objectData(data) {
-			console.log("objectData called on SimpleComponent");
+			console.log("objectData called on PersonComponent");
 			this.componentData = data;
 		}
 
@@ -106,5 +110,5 @@
 	}
 
 	// Define our web component
-	customElements.define('simple-component', SimpleComponent);
+	customElements.define('person-component', PersonComponent);
 })();

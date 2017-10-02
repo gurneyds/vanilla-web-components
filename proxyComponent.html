@@ -9,27 +9,51 @@
 				margin-top:30px;
 				border:1px solid black;
 			}
+			h1,h2,h3,h4 {
+				margin-left:10px;
+			}
+			.demo-container {
+				border:1px solid black;
+				margin:10px;
+			}
+			.person-container {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+			}
 		</style>
 
 		<script src="js/proxyComponent.js"></script>
-		<script src="js/simpleComponent.js"></script>
+		<script src="js/personComponent.js"></script>
+		<script src="js/addressComponent.js"></script>
+		<script src="js/contactComponent.js"></script>
 	</head>
 	<body>
 	<div class="demo">
 		<h1>Proxy Component Example</h1>
-		<h4>The proxy component fetches the data and hands it to the sub-component</h4>
+		<h3>The proxy component fetches the data and hands it to the sub-component</h3>
 
-		<proxy-component src="data/mockData1.json" callbackNames="componentData, objectData, giveMeData">
-			<div slot="slot1">
-				<simple-component id="1" user="Bob" role="Manager"/>
+		<br/>
+		<h4>Proxy component that feeds data into several sub-components</h4>
+		<div class="demo-container">
+			<proxy-component src="data/mockData1.json" callbackNames="person, address, contact">
+				<div class="person-container">
+					<person-component></person-component>
+					<address-component></address-component>
+					<contact-component></contact-component>
+				</div>
+			</proxy-component>
+		</div>
+
+		<br/>
+		<h4>Stand alone component using attribute data</h4>
+		<div class="demo-container">
+			<div class="person-container">
+				<person-component id="1234" user="Marlin" role="Manager"></person-component>
+				<address-component street="234 Merlin Way" city="Orlando" state="Florida"></address-component>
+				<contact-component homePhone="1-home" officePhone="2-office" cellPhone="3-cell" email="4-email"></contact-component>
 			</div>
-			<div slot="slot2">
-				<simple-component id="2" user="George" role="Developer"/>
-			</div>
-			<div slot="slot3">
-				<simple-component id="3" user="Henry" role="QA"/>
-			</div>
-		</proxy-component>
+		</div>
+
 	</div>
 </body>
 </html>
