@@ -35,11 +35,23 @@
 		<br/>
 		<h4>Proxy component that feeds data into several sub-components</h4>
 		<div class="demo-container">
+			<!-- TODO -->
+			<!-- Emit an event when the data is received. If dispatchEvent returns true, then process the data, else ignore
+				Enhance the callbackNames attribute to accept things like person:*, address:address2, contact
+				person:* would call the "person" callback method and return all data
+				address:address2 would call the "address" callback method and extract the "address2" portion of the json
+				contact would call the "contact" callback method and extract the "contact" portion of the json
+			-->
 			<proxy-component src="data/mockData1.json" callbackNames="person, address, contact">
 				<div class="person-container">
 					<person-component></person-component>
 					<address-component></address-component>
 					<contact-component></contact-component>
+					<!-- TODO - experiment with embedded proxy-component
+					<proxy-component src="source2">
+						<skills-component></skills-component>
+					</proxy-component>
+					-->
 				</div>
 			</proxy-component>
 		</div>
