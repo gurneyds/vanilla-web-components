@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Proxy Component</title>
+		<link rel="stylesheet" href="css/familysearch-styles.css"/>
+		<style>
+			.demo {
+				margin-top:30px;
+				border:1px solid black;
+			}
+			h1,h2,h3,h4 {
+				margin-left:10px;
+			}
+			.demo-container {
+				border:1px solid black;
+				margin:10px;
+			}
+			.person-container {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+			}
+		</style>
+
+		<script src="js/proxyComponent.js"></script>
+		<script src="js/personComponent.js"></script>
+		<script src="js/addressComponent.js"></script>
+		<script src="js/contactComponent.js"></script>
+	</head>
+	<body>
+	<div class="demo">
+		<h1>Proxy Component Example</h1>
+		<h3>Event interceptor transforms the data into a consumable format</h3>
+		<br/>
+		<h4>Data transformation example</h4>
+		<div class="demo-container">
+			<!-- The event interceptor at the bottom transforms this data into usable data -->
+			<proxy-component src="data/scrambledData1.json" callbacks="person:*, address, contact">
+				<div class="person-container">
+					<person-component></person-component>
+					<address-component></address-component>
+					<contact-component></contact-component>
+				</div>
+			</proxy-component>
+		</div>
+	</div>
+	<script src="js/eventInterceptor.js"></script>
+</body>
+</html>

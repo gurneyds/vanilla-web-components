@@ -6,10 +6,10 @@
 			"user": data.person.name,
 			"role": data.person.role,
 			"address": {
-				"street": data.person.addresses[0].street,
-				"city": data.person.addresses[0].city,
-				"state": data.person.addresses[0].state,
-				"zip": data.person.addresses[0].zip
+				"street": data.person.location.street,
+				"city": data.person.location.city,
+				"state": data.person.location.state,
+				"zip": data.person.location.zip
 			},
 			"contact" : {
 				"phone": {

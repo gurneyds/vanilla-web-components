@@ -3,14 +3,12 @@
 		"id": 1,
 		"name": "Bob-scrambled",
 		"role": "Architect-scrambled",
-		"addresses": [
-			{
+		"location":{
 				"street": "1234 MyWay",
 				"city": "Anywhere",
 				"state": "California",
 				"zip": "90210"
-			}
-		],
+		},
 		"details" : {
 			"phone": {
 				"home": "(123) 456-7890",

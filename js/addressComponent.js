@@ -89,10 +89,10 @@
 
 		// This is a callback method that call by anyone wishing to set the data
 		set address(data) {
-			this.street = data.address.street;
-			this.city = data.address.city;
-			this.state = data.address.state;
-			this.zip = data.address.zip;
+			this.street = data.street;
+			this.city = data.city;
+			this.state = data.state;
+			this.zip = data.zip;
 		}
 
 		static get observedAttributes() { return ['street', 'city', 'state', 'zip'] };

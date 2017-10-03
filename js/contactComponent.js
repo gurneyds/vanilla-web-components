@@ -89,10 +89,10 @@
 
 		// This is a callback method that call by anyone wishing to set the data
 		set contact(data) {
-			this.homePhone = data.contact.phone.home;
-			this.officePhone = data.contact.phone.office;
-			this.cellPhone = data.contact.phone.cell;
-			this.email = data.contact.email;
+			this.homePhone = data.phone.home;
+			this.officePhone = data.phone.office;
+			this.cellPhone = data.phone.cell;
+			this.email = data.email;
 		}
 
 		static get observedAttributes() { return ['homePhone', 'officePhone', 'cellPhone', 'email'] };

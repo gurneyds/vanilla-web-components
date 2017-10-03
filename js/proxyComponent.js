@@ -34,17 +34,18 @@
 			walkTheDOM(node,
 				function(node){
 					// Check to see if the node contains any of the callback names
-					rootNode._callbackNames.forEach(function(name){
+					rootNode._callbacks.forEach(function(cb){
 						// NOTE: If a given node has more than one callback names that match, all callbacks will be called
 						// in the order that they were discovered
-						if(Reflect.has(node, name)) {
+						// TODO - Reflect will not work in IE11 - need to find another way to do this
+						if(Reflect.has(node, cb.callback)) {
 							// If this name has not been seen yet, create it
-							if(!rootNode._listeners[name]) {
-								rootNode._listeners[name] = [];
+							if(!rootNode._listeners[cb.callback]) {
+								rootNode._listeners[cb.callback] = [];
 							}
 
 							// Add this node to the name
-							rootNode._listeners[name].push(node);
+							rootNode._listeners[cb.callback].push(node);
 						}
 					});
 				}
@@ -90,7 +91,7 @@
 			this.id = this.getAttribute('id');
 			this.user = this.getAttribute('user');
 			this.role = this.getAttribute('role');
-			this.src = this.getAttribute('src');
+			// this.src = this.getAttribute('src');
 			this._callbackNames = (this.getAttribute('callbackNames') || '').split(',');
 
 			// Trim any whitespace
@@ -98,9 +99,42 @@
 				return name.trim();
 			});
 
+			this._prepareCallbacks();
+
 			// Use a timeout because the slot components haven't been created yet
 			// This will also fetch the data if a src attribute was provided
 			setTimeout(prepareForWalk(this), 1);
+		}
+
+		/* Callbacks can have the following forms:
+		 1-) organization:*			This will call organization and pass thru all of the data
+		 2-) person:user			This will call person and only pass thru the user portion of the data
+		 3-) person					This will call person and only pass thru the person portion of the data
+		 4-) person:user.person		This will call person and only pass thru the user.person portion of the data
+
+		 This function creates a data structure for the function name and the subTree
+		*/
+		_prepareCallbacks() {
+			this._callbacks = [];
+			var callbacks = this.getAttribute('callbacks') ? this.getAttribute('callbacks').split(',') : null;
+
+			if(callbacks) {
+				var that = this;
+				callbacks.forEach(function(text){
+					var parts = text.split(":");
+					var subTree = '*';
+					if(parts[1]){
+						parts[1] = parts[1].trim();
+						if(parts[1] != '*') {
+							subTree = parts[1];
+						}
+					} else {
+						subTree = parts[0].trim();
+					}
+
+					that._callbacks.push({callback: parts[0].trim(), subTree: subTree});
+				})
+			}
 		}
 
 		_fetchData() {
@@ -137,13 +171,25 @@
 
 		// Send the data to the listeners
 		_notifyListeners(data) {
-			if(this._callbackNames && this._callbackNames.length > 0) {
+			if(this._callbacks && this._callbacks.length > 0) {
 				var that = this;
 				// Forward the information to the sub-components
-				this._callbackNames.forEach(function(name){
-					if(that._listeners && that._listeners[name]){
-						that._listeners[name].forEach(function(listener){
-							listener[name] = data;
+				this._callbacks.forEach(function(cb){
+					if(that._listeners && that._listeners[cb.callback]){
+						that._listeners[cb.callback].forEach(function(listener){
+							// This is the data that will be sent to the listener
+							var sendData = data;
+
+							// See the comments above for the cases
+							if(cb.subTree === '*') {
+								sendData = data;				// Send all data
+							} else if(cb.subTree != null) {
+								sendData = data[cb.subTree];	// Send a portion of the data - with the name of the subTree
+							} else if(cb.subTree === '') {
+								sendData = data[cb.callback];		// Send a portion of the data - with the same name as the callback
+							}
+
+							listener[cb.callback] = sendData;
 						})
 					}
 				});
