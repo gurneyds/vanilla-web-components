@@ -43,6 +43,18 @@
 				</div>
 			</proxy-component>
 		</div>
+
+		<h4>Custom event name</h4>
+		<div class="demo-container">
+			<!-- The event interceptor at the bottom transforms this data into usable data -->
+			<proxy-component src="data/scrambledData1.json" callbacks="person:*, address, contact" data-received-event-name="my-custom-event-name">
+				<div class="person-container">
+					<person-component></person-component>
+					<address-component></address-component>
+					<contact-component></contact-component>
+				</div>
+			</proxy-component>
+		</div>
 	</div>
 	<script src="js/eventInterceptor.js"></script>
 </body>

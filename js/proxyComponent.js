@@ -72,8 +72,18 @@
 		}
 	}
 
+	var DATA_RECEIVED_EVENT_NAME = 'proxy-comp-data-received';
+
 	/*
-	Proxy component that provides data to one or more sub-components1
+	Proxy component that provides data to one or more sub-components
+	Attributes:
+		src: specifies where to get the data
+		callbacks: specifies the name(s) of callbacks to discover in sub-components and to call when the data has been received
+		data-received-event-name: specifies the name of the event that will be emitted when the data is received. A listeners could
+			be provided that would intercept the data, transform it and then call back into the event target with some new data
+
+		Example usage:
+		<proxy-component src="/myPath/getData" callbacks="person,address,contact" data-received-event-name="myCustomEventName"></proxy-component>
 	*/
 	class ProxyComponent extends HTMLElement {
 		constructor() {
@@ -91,7 +101,7 @@
 			this.id = this.getAttribute('id');
 			this.user = this.getAttribute('user');
 			this.role = this.getAttribute('role');
-			// this.src = this.getAttribute('src');
+			this._dataReceivedEventName = this.getAttribute('data-received-event-name') || DATA_RECEIVED_EVENT_NAME;
 			this._callbackNames = (this.getAttribute('callbackNames') || '').split(',');
 
 			// Trim any whitespace
@@ -147,7 +157,7 @@
 		_successCallback(outer) {
 			return function(data) {
 				// Emit an event for anyone interested in this data
-				var event = new CustomEvent("data-received",{
+				var event = new CustomEvent(outer._dataReceivedEventName, {
 					detail:data,
 					bubbles: true,
 					cancelable: true
