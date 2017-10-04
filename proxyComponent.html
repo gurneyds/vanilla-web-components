@@ -59,10 +59,19 @@
 		<br/>
 		<h4>Callback mapping example</h4>
 		<div class="demo-container">
-			<!-- TODO - allow things like person.location and person.details  data['person']['location'] is what needs to be created
-			<!-- The event interceptor at the bottom transforms this data into usable data -->
-			<!--<proxy-component src="data/scrambledData1.json" callbacks="person, address:person.location, contact:person.details">-->
-			<proxy-component src="data/mockData1.json" callbacks="person:*, address, contact">
+			<proxy-component src="data/scrambledData1.json" callbacks="person, address:person.location, contact:person.details">
+				<div class="person-container">
+					<person-component></person-component>
+					<address-component></address-component>
+					<contact-component></contact-component>
+				</div>
+			</proxy-component>
+		</div>
+
+		<br/>
+		<h4>Callback mapping example with multiple paths</h4>
+		<div class="demo-container">
+			<proxy-component src="data/scrambledData2.json" callbacks="person:organization.person, address:organization.person.location, contact:organization.person.details.contact">
 				<div class="person-container">
 					<person-component></person-component>
 					<address-component></address-component>

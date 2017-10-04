@@ -80,7 +80,8 @@
 		src: specifies where to get the data
 		callbacks: specifies the name(s) of callbacks to discover in sub-components and to call when the data has been received
 		data-received-event-name: specifies the name of the event that will be emitted when the data is received. A listeners could
-			be provided that would intercept the data, transform it and then call back into the event target with some new data
+			be provided that would intercept the data, transform it and then call back into the event target with some new data. The
+			default event name is 'proxy-comp-data-received'.
 
 		Example usage:
 		<proxy-component src="/myPath/getData" callbacks="person,address,contact" data-received-event-name="myCustomEventName"></proxy-component>
@@ -132,14 +133,20 @@
 				var that = this;
 				callbacks.forEach(function(text){
 					var parts = text.split(":");
-					var subTree = '*';
+					var subTree = ['*'];
 					if(parts[1]){
-						parts[1] = parts[1].trim();
-						if(parts[1] != '*') {
-							subTree = parts[1];
+						if(parts[1].trim() != '*') {
+							// check to see if the subTree has multiple parts (ie person.location.street)
+							var subParts = parts[1].trim().split('.')
+							var partsArray = [];
+							subParts.forEach(function(part){
+								partsArray.push(part);
+							})
+
+							subTree = partsArray;
 						}
 					} else {
-						subTree = parts[0].trim();
+						subTree = [parts[0].trim()];
 					}
 
 					that._callbacks.push({callback: parts[0].trim(), subTree: subTree});
@@ -165,9 +172,21 @@
 				if(outer.dispatchEvent(event)) {
 					// This will send the original data - not the transformed data
 					outer._notifyListeners(data);
-				}//else {
-					// The intercepter will call set the transformed data by calling the data property
-				//}
+				}/*else {
+					This means that the event has been intercepted. The code that intercepted the event could call
+				 	back into this component and send the transformed data. For example:
+
+					document.querySelector('body').addEventListener("proxy-comp-data-received", function(event){
+						// Stop the normal event flow because the data needs to be transformed
+						event.preventDefault();
+
+						// Transform the data using custom logic
+						event.detail = ..... some custom logic
+
+						// Send the data back to the target (this component's data property)
+						event.target.data = transformPerson(event.detail);
+					});
+				}*/
 			}
 		}
 
@@ -191,11 +210,16 @@
 							var sendData = data;
 
 							// See the comments above for the cases
-							if(cb.subTree === '*') {
+							if(cb.subTree.length === 1 && cb.subTree[0] === '*') {
 								sendData = data;				// Send all data
 							} else if(cb.subTree != null) {
-								sendData = data[cb.subTree];	// Send a portion of the data - with the name of the subTree
-							} else if(cb.subTree === '') {
+								// Walk data path specified by the subTree
+								var temp = data;
+								cb.subTree.forEach(function(path){
+									temp = temp[path];
+								})
+								sendData = temp
+							} else if(cb.subTree.length === 0) {
 								sendData = data[cb.callback];		// Send a portion of the data - with the same name as the callback
 							}
 

@@ -1,7 +1,7 @@
 {
 	"person": {
 		"id": 1,
-		"name": "Bob-scrambled",
+		"user": "Bob-scrambled",
 		"role": "Architect-scrambled",
 		"location":{
 				"street": "1234 MyWay",
