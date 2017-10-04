@@ -15,5 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "http-server": "^0.10.0"
+},
+"repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/protected-refuge-90457"
   }
 }
