@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Proxy Component</title>
+		<link rel="stylesheet" href="css/familysearch-styles.css"/>
+		<style>
+			.demo {
+				margin-top:30px;
+				border:1px solid black;
+			}
+			h1,h2,h3,h4 {
+				margin-left:10px;
+			}
+			.demo-container {
+				border:1px solid black;
+				margin:10px;
+			}
+			.person-container {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+			}
+			.code {
+				margin-top: 30px;
+				margin-bottom: 20px;
+			}
+		</style>
+
+		<script src="js/searchForm.js"></script>
+	</head>
+	<body>
+	<div class="demo">
+		<h1>Proxy Component Example</h1>
+		<h3>This demonstrates how a component can receive translation text</h3>
+
+		<br/>
+		<h4>Search form that requires translated text for it's UI</h4>
+		<div class="demo-container">
+			<search-form></search-form>
+		</div>
+
+	</body>
+</html>
