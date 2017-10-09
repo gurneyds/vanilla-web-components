@@ -20,6 +20,10 @@
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr;
 			}
+			.code {
+				margin-top: 30px;
+				margin-bottom: 20px;
+			}
 		</style>
 
 		<script src="js/proxyComponent.js"></script>
@@ -30,11 +34,21 @@
 	<body>
 	<div class="demo">
 		<h1>Proxy Component Example</h1>
-		<h3>The proxy component fetches the data and hands it to the sub-component</h3>
+		<h3>This demonstrates how a proxy component fetches the data and hands it to the sub-component</h3>
 
 		<br/>
 		<h4>Proxy component that feeds data into several sub-components</h4>
 		<div class="demo-container">
+			<xmp readonly class="code">
+				<proxy-component src="data/mockData1.json" callbacks="person:*, address, contact">
+					Person component
+					<person-component></person-component>
+					Address component
+					<address-component></address-component>
+					Contact component
+					<contact-component></contact-component>
+				</proxy-component>
+			</xmp>
 			<!-- TODO -->
 			<!-- Emit an event when the data is received. If dispatchEvent returns true, then process the data, else ignore
 				Enhance the callbackNames attribute to accept things like person:*, address:address2, contact

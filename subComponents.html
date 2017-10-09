@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test for components</title>
+		<link rel="import" href="./html/componentA.html"/>
+		<link rel="import" href="./html/componentB.html"/>
+		<link rel="import" href="./html/componentC.html"/>
+		<link rel="import" href="./html/componentD.html"/>
+		<style>
+			.demo {
+				margin-top:30px;
+				border:1px solid black;
+			}
+		</style>
+
+		<script src="./js/componentE.js"></script>
+		<script src="./js/componentF.js"></script>
+	</head>
+	<body>
+	<div class="demo">
+		<h1>Static html based component</h1>
+		<comp-a value="99"></comp-a>
+	</div>
+
+	<div id="container1" class="demo">
+		<h1>Dynamic html based component</h1>
+	</div>
+
+	<div class="demo">
+		<h1>Static html based component - sub-component created in constructor</h1>
+		<comp-c value="99"></comp-c>
+	</div>
+
+	<div id="container2" class="demo">
+		<h1>Dynamic html based component - sub-component created in constructor</h1>
+	</div>
+
+	<div class="demo">
+		<h1>Static JS based component</h1>
+		<comp-e value="99"></comp-e>
+	</div>
+
+	<div id="container3" class="demo">
+		<h1>Dynamic JS based component - sub-component in parent template</h1>
+	</div>
+
+	<div id="container4" class="demo">
+		<h1>Dynamic JS based component - property called before document.appendChild() should be reflected in sub-component</h1>
+	</div>
+
+	<script>
+		var compA = document.createElement('comp-a');
+		document.querySelector('#container1').appendChild(compA);
+		// We would expect this value to make it into the sub-component - but it doesn't
+		compA.value = "Frank";
+
+		// Constructor style components
+		var compC = document.createElement('comp-c');
+		document.querySelector('#container2').appendChild(compC);
+
+		// We would expect this value to make it into the sub-component - and it does
+		compC.value = "George";
+
+		var compE = document.createElement('comp-e');
+		document.querySelector('#container3').appendChild(compE);
+		compE.value = "Henry";
+
+		var compE2 = document.createElement('comp-e');
+		compE2.value = "This was set before insert";
+		document.querySelector('#container4').appendChild(compE2);
+//		compE2.value = "This was set after insert";
+
+	</script>
+	</body>
+</html>

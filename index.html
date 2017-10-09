@@ -1,76 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>Test for components</title>
-		<link rel="import" href="./html/componentA.html"/>
-		<link rel="import" href="./html/componentB.html"/>
-		<link rel="import" href="./html/componentC.html"/>
-		<link rel="import" href="./html/componentD.html"/>
-		<style>
-			.demo {
-				margin-top:30px;
-				border:1px solid black;
-			}
-		</style>
-
-		<script src="./js/componentE.js"></script>
-		<script src="./js/componentF.js"></script>
+		<title>title</title>
+		<link rel="stylesheet" href="stylesheet">
 	</head>
 	<body>
-	<div class="demo">
-		<h1>Static html based component</h1>
-		<comp-a value="99"></comp-a>
-	</div>
+		<h1>Vanilla Web Components</h1>
+		<head>
+			This site demonstrates native web components and how they might be constructed. Each section demonstrates
+			a potential solution when working with native web components.
+		</head>
+		<sections>
+			<section>
+				<h2><a href="subComponents.html">Sub Components</a></h2>
+				A component may be complex and need to be broken down into several sub-components. These sub-components
+				will probably need to be fed information from the parent component. This sample demonstrates how sub-components
+				can be children of a parent component and receive configuration information as well as operational information.
+			</section>
 
-	<div id="container1" class="demo">
-		<h1>Dynamic html based component</h1>
-	</div>
+			<section>
+				<h2><a href="selfContained.html">Self Contained components</a></h2>
+				Some components will be able to stand alone and have no need for interaction with other elements on the page.
+				The <img> tag is an example of this behavior. The component is configured via attributes with all of the
+				information necessary for it's operation.
+			</section>
 
-	<div class="demo">
-		<h1>Static html based component - sub-component created in constructor</h1>
-		<comp-c value="99"></comp-c>
-	</div>
+			<section>
+				<h2><a href="proxyComponent.html">Proxy Web Component</a></h2>
+				It may make sense to externalize the gathering of the data outside of a component. The purpose of a proxy
+				component would be to gather the necessary data and then pass it on to it's children.
+			</section>
 
-	<div id="container2" class="demo">
-		<h1>Dynamic html based component - sub-component created in constructor</h1>
-	</div>
-
-	<div class="demo">
-		<h1>Static JS based component</h1>
-		<comp-e value="99"></comp-e>
-	</div>
-
-	<div id="container3" class="demo">
-		<h1>Dynamic JS based component - sub-component in parent template</h1>
-	</div>
-
-	<div id="container4" class="demo">
-		<h1>Dynamic JS based component - property called before document.appendChild() should be reflected in sub-component</h1>
-	</div>
-
-	<script>
-		var compA = document.createElement('comp-a');
-		document.querySelector('#container1').appendChild(compA);
-		// We would expect this value to make it into the sub-component - but it doesn't
-		compA.value = "Frank";
-
-		// Constructor style components
-		var compC = document.createElement('comp-c');
-		document.querySelector('#container2').appendChild(compC);
-
-		// We would expect this value to make it into the sub-component - and it does
-		compC.value = "George";
-
-		var compE = document.createElement('comp-e');
-		document.querySelector('#container3').appendChild(compE);
-		compE.value = "Henry";
-
-		var compE2 = document.createElement('comp-e');
-		compE2.value = "This was set before insert";
-		document.querySelector('#container4').appendChild(compE2);
-//		compE2.value = "This was set after insert";
-
-	</script>
+			<section>
+				<h2><a href="proxyComponentWithInterceptor.html">Proxy Web Component</a></h2>
+				The data needs of the children components may not match the provided data. An event intercepter is demonstrated
+				that can transform the original data into a form that is consumable by the children components.
+			</section>
+		</sections>
 	</body>
 </html>
