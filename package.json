@@ -18,6 +18,7 @@
     "url": "https://git.heroku.com/protected-refuge-90457"
   },
   "dependencies": {
-    "http-server": "^0.10.0"
+    "http-server": "^0.10.0",
+    "redux": "^3.7.2"
   }
 }
