@@ -27,6 +27,9 @@
 			<div>ID:<span class="id"></span></div>
 			<div>User:<span class="user"></span></div>
 			<div>Role:<span class="role"></span></div>
+			<div><button id="addButton">Add</button></div>
+			<div><button id="updateButton">Update</button></div>
+			<div><button id="deleteButton">Delete</button></div>
 		</div>
 	`;
 
@@ -48,7 +51,31 @@
 			this.user = this.getAttribute('user');
 			this.role = this.getAttribute('role');
 			this.data = "";
+
+			this.shadowRoot.querySelector('#addButton').addEventListener('click', this._sendEvent(this, 'add_person'));
+	 		this.shadowRoot.querySelector('#updateButton').addEventListener('click', this._sendEvent(this, 'update_person'));
+			this.shadowRoot.querySelector('#deleteButton').addEventListener('click', this._sendEvent(this, 'delete_person'));
 		}
+
+	_sendEvent(context, eventName) {
+	  var that = context;
+	  return function(event) {
+		  var person = {
+			id: that.id,
+			user: that.user,
+			role: that.role
+		  };
+
+		  // Emit an event for the add
+		  var event = new CustomEvent(eventName, {
+			detail: person,
+			bubbles: true,
+			cancelable: true
+		  });
+		  that.dispatchEvent(event);
+		  console.log("personComponent " + eventName + " event emitted");
+		};
+	  };
 
 		disconnectedCallback() {
 		}
@@ -58,6 +85,7 @@
 		}
 
 		set id(id) {
+			this._id = id;
 			this.shadowRoot.querySelector('.id').textContent = id;
 			this.setAttribute('id', id);
 		}
@@ -67,6 +95,7 @@
 		}
 
 		set user(user) {
+			this._user = user;
 			this.shadowRoot.querySelector('.user').textContent = user;
 			this.setAttribute('user', user);
 		}
@@ -76,6 +105,7 @@
 		}
 
 		set role(role) {
+			this._role = role;
 			this.shadowRoot.querySelector('.role').textContent = role;
 			this.setAttribute('role', role);
 		}

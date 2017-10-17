@@ -42,13 +42,13 @@ var officesReducer = function(state = initialState.offices, action) {
   } else if(action.type === 'RESET_OFFICE') {
     return [];
   } else if(action.type === 'UPDATE_OFFICE') {
-  return state.map(name => {
-    if(name.id === action.data.id) {
-      return action.data;
-    } else {
-      return name;
-    }
-  });
+      return state.map(name => {
+        if(name.id === action.data.id) {
+          return action.data;
+        } else {
+          return name;
+        }
+      });
 }
   return state;
 }
