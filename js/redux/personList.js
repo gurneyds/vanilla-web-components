@@ -35,25 +35,39 @@
 		</div>
 	`;
 
+  var _rowTemplate = `Id:<span class="id"></span>User:<span class="user"></span>Role:<span class="role"></span>`
+
 	class PersonList extends HTMLElement {
 		constructor() {
 			super();
+      console.log('PersonList constructor called');
 
 			const template = _styles + _template;
 			this.attachShadow({mode: 'open'}).innerHTML = template;
 		}
 
 		connectedCallback() {
+      console.log('PersonList connectedCallback called');
 		}
 
 		disconnectedCallback() {
 		}
 
-    set list(data) {
-      this.shadowRoot.querySelector('container').innerHTML = '';
+    setData(data) {
+      console.log("personList data set with:" + JSON.stringify(data));
+
       if(data) {
+        // Clear out the old rows
+        var container = this.shadowRoot.querySelector('.container');
+        container.innerHTML = '';
+
         data.forEach(function(person) {
-          // TODO - create the DOM elements and insert
+          var el = document.createElement('div');
+          el.innerHTML = _rowTemplate;
+          el.querySelector('.id').textContent = person.id;
+          el.querySelector('.user').textContent = person.user;
+          el.querySelector('.role').textContent = person.role;
+          container.append(el);
         })
       }
     }
