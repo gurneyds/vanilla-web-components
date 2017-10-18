@@ -40,6 +40,7 @@
 	class PersonComponent extends HTMLElement {
 		constructor() {
 			super();
+			console.log("PersonComponent constructor called");
 
 			const template = _styles + _template;
 			this.attachShadow({mode: 'open'}).innerHTML = template;
