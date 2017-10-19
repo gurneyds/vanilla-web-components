@@ -23,7 +23,7 @@ var reduxGlue = (function() {
   // Make sure that we have both a reducer and the meta data before creating the store
   var _createStore = function() {
     if(_reducer && _metaData) {
-      _store = Redux.createStore(_reducer, _metaData.initialState);
+      _store = Redux.createStore(_reducer);
 
       // These must be called after the store is setup so that the subscribers can be attached
       _setupEventListeners(_metaData);
@@ -81,7 +81,6 @@ var reduxGlue = (function() {
                   // Select the element and call the function name
                   var el = subscriber.context.querySelector(selectorParts[0]);
                   if(el && el != null) {
-                    var el = subscriber.context.querySelector(subscriber.elName);
                       el[selectorParts[1]] = data;
                   } else {
                     throw 'Cannot notify subscriber:"' + subscriber.name + '" because the calback selector element named:"' + subscriber.elName + '" did not find the element';

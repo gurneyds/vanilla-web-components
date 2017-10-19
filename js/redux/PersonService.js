@@ -2,9 +2,6 @@
   // Setup the metaData for the ReduxGlue module
   var metaData =
     {
-      initialState:{
-        people: []
-      },
       domEventListener: eventListener,
       events: [
         {
@@ -55,11 +52,14 @@
   // The method setReducer(reducer) could be called on ReduxGlue
   function setupReducers() {
     var personReducer = function(state = [], action) {
+      if(action == null) {
+        return state;
+      }
+
       console.log('Person reducer called with state:' + JSON.stringify(state) + " action:" + JSON.stringify(action));
 
       if(action.type === 'ADD-PERSON') {
-        state.push(action.data);
-        return state;
+        return state.concat(action.data);
       } else if(action.type === 'UPDATE-PERSON') {
           return state.map(function(person){
             if(person.id === action.data.id) {
@@ -77,7 +77,7 @@
           }
         });
       } else if(action.type === 'REMOVE_ALL_PERSON') {
-        return state.filter(function(person){return false;});
+        return [];
       } else {
         return state;
       }
