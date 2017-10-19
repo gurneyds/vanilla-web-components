@@ -27,14 +27,22 @@
       reducer:setupReducers(),
       subscribers: [
         {
+          // This is here entirely for error reporting
+          name: '<person-list>',
+
+          // TODO - these can probably be combined into 2 things:
+          // callbackInfo:  ... this could be a string to select the element and property, OR a function
+          // stateSelector: optional method to return a portion of the state
+
           // Provide enough information to find a function in a component
           context: eventListener, // This is the context from which the element is selected. This could be important for shadow dom elements
           elName: 'person-list',
-          funcName: 'data',
+          propName: 'data',
 
           // Or just supply a callback function - which could be a method in a component
-          callbackFn: function(data) {myCallbackFn(data);},
-          // Not sure we need this. If we have an internal subscriber, then this could filter the state tree
+          callbackFn2: function(data) {myCallbackFn(data);},
+
+          // This is optional. If provided the function receives the state and can return a portion of the state tree
           stateSelector: function(state) {return state.people;}
         }
       ]

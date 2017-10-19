@@ -2,10 +2,15 @@ var reduxGlue = (function() {
   // The meta data drives all of the processing
   var _store;
   var _metaData;
+  var _reducer;
 
   var setMetaData = function(metaData) {
     _metaData = metaData;
-    _store = Redux.createStore(metaData.reducer, metaData.initialState);
+
+    // Use the reducer passed in if present
+    var reducer = _reducer ? _reducer :metaData.reducer;
+
+    _store = Redux.createStore(reducer, metaData.initialState);
 
     // These must be called after the store is setup so that the subscribers can be attached
     _setupEventListeners(metaData);
@@ -58,10 +63,11 @@ var reduxGlue = (function() {
             } else {
               // Select the element and call the function name
               var el = subscriber.context.querySelector(subscriber.elName);
-              if(el) {
-                // TODO - this probably won't work, funcName is a string
+              if(el && el != null) {
                 var el = subscriber.context.querySelector(subscriber.elName);
-    //            el.funcName()
+                  el[subscriber.propName] = data;
+              } else {
+                throw 'Cannot notify subscriber:"' + subscriber.name + '" because the calback selector element named:"' + subscriber.elName + '" did not find the element';
               }
             }
           });
@@ -70,6 +76,7 @@ var reduxGlue = (function() {
   }
 
   return {
-    setMetaData: setMetaData
+    setMetaData: setMetaData,
+    setReducer: function(reducer) {_reducer = reducer;}
   }
 })();

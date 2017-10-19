@@ -31,6 +31,7 @@
 			<div><button id="updateButton">Update</button></div>
 			<div><button id="deleteButton">Delete</button></div>
 			<div><button id="editButton">Edit</button></div>
+      <div><button id="resetButton">Reset</button></div>
 		</div>
 	`;
 
@@ -62,6 +63,7 @@
 			this.shadowRoot.querySelector('#updateButton').addEventListener('click', this._sendEvent(this, 'update_person'));
 			this.shadowRoot.querySelector('#deleteButton').addEventListener('click', this._sendEvent(this, 'delete_person'));
 			this.shadowRoot.querySelector('#editButton').addEventListener('click', this._toggleEdit(this));
+      this.shadowRoot.querySelector('#resetButton').addEventListener('click', this._sendEvent(this, 'remove_all_person'));
 		}
 
 	_sendEvent(context, eventName) {

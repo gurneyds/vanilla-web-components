@@ -50,7 +50,7 @@
 		disconnectedCallback() {
 		}
 
-    setData(data) {
+    set data(data) {
       console.log("personList data set with:" + JSON.stringify(data));
 
       if(data) {
