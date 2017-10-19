@@ -29,9 +29,6 @@
 			An error has occurred ==> <span class="error-message"></span>
 		</div>
 		<div class="container">
-			<div>Id:<span class="id">1234</span>User:<span class="user">George</span>Role:<span class="role">Manager</span></div>
-      <div>Id:<span class="id">1234</span>User:<span class="user">George</span>Role:<span class="role">Manager</span></div>
-      <div>Id:<span class="id">1234</span>User:<span class="user">George</span>Role:<span class="role">Manager</span></div>
 		</div>
 	`;
 

@@ -1,6 +1,4 @@
 (function(eventListener) {
-  console.log("Inside of PersonService.js");
-
   // Setup the metaData for the ReduxGlue module
   var metaData =
     {
@@ -29,21 +27,32 @@
       reducer:setupReducers(),
       subscribers: [
         {
+          // Provide enough information to find a function in a component
+          context: eventListener, // This is the context from which the element is selected. This could be important for shadow dom elements
           elName: 'person-list',
           funcName: 'data',
-          callbackFn: function() {console.log('This is an optional callback function. If present it is called, otherwise the element is selected and the function is called.')},
-          stateSelector: function(state) {return state.person;}
+
+          // Or just supply a callback function - which could be a method in a component
+          callbackFn: function(data) {myCallbackFn(data);},
+          // Not sure we need this. If we have an internal subscriber, then this could filter the state tree
+          stateSelector: function(state) {return state.people;}
         }
       ]
-    }
-  );
+    };
 
+  function myCallbackFn(data) {
+    console.log('Made it to the callbackFn');
+    eventListener.querySelector('person-list').setData(data);
+  }
+
+  // TODO - we would probably want to externalize the reducers, but that would require gulp or webpack
   function setupReducers() {
     var personReducer = function(state = [], action) {
       console.log('Person reducer called with state:' + JSON.stringify(state) + " action:" + JSON.stringify(action));
 
       if(action.type === 'ADD-PERSON') {
-        return state.concat(action.data);
+        state.push(action.data);
+        return state;
       } else if(action.type === 'UPDATE-PERSON') {
           return state.map(function(person){
             if(person.id === action.data.id) {
@@ -61,13 +70,13 @@
           }
         });
       } else if(action.type === 'REMOVE_ALL_PERSON') {
-        return [];
+        return state.filter(function(person){return false;});
       } else {
         return state;
       }
     }
 
-    // Return a single function
+    // Return a single function - this is not needed for a single reducer. If there is more than one reducer, then this is necessary
     return Redux.combineReducers(
       {
         people: personReducer
