@@ -8,7 +8,10 @@
       domEventListener: eventListener,
       events: [
         {
+          // Event name
           name: 'add_person',
+
+          // Action type to dispatch with the event data detail
           actionType: 'ADD-PERSON'
         },
         {
@@ -21,6 +24,8 @@
         },
         {
           name: 'remove_all_person',
+
+          // If provided the action creator function is called and passed to the dispatcher
           actionCreator: function() { return {type: 'REMOVE_ALL_PERSON'} }
         }
       ],
@@ -30,17 +35,10 @@
           // This is here entirely for error reporting
           name: '<person-list>',
 
-          // TODO - these can probably be combined into 2 things:
-          // callbackInfo:  ... this could be a string to select the element and property, OR a function
-          // stateSelector: optional method to return a portion of the state
-
-          // Provide enough information to find a function in a component
-          context: eventListener, // This is the context from which the element is selected. This could be important for shadow dom elements
-          elName: 'person-list',
-          propName: 'data',
-
-          // Or just supply a callback function - which could be a method in a component
-          callbackFn2: function(data) {myCallbackFn(data);},
+          // callbackInfo can either be a selector string and property  (selector.property)
+          // or a function
+          callbackInfo2: 'person-list.data',
+          callbackInfo: function(data) {myCallbackFn(data);},
 
           // This is optional. If provided the function receives the state and can return a portion of the state tree
           stateSelector: function(state) {return state.people;}
@@ -50,10 +48,11 @@
 
   function myCallbackFn(data) {
     console.log('Made it to the callbackFn');
-    eventListener.querySelector('person-list').setData(data);
+    eventListener.querySelector('person-list').data = data;
   }
 
   // TODO - we would probably want to externalize the reducers, but that would require gulp or webpack
+  // The method setReducer(reducer) could be called on ReduxGlue
   function setupReducers() {
     var personReducer = function(state = [], action) {
       console.log('Person reducer called with state:' + JSON.stringify(state) + " action:" + JSON.stringify(action));

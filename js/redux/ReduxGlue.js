@@ -1,26 +1,37 @@
 var reduxGlue = (function() {
   // The meta data drives all of the processing
+  // the reducer can be passed in separately from the metaData if desired
   var _store;
   var _metaData;
   var _reducer;
 
   var setMetaData = function(metaData) {
+    // TODO - There could be some code to validate the metaData
+
     _metaData = metaData;
-
-    // Use the reducer passed in if present
-    var reducer = _reducer ? _reducer :metaData.reducer;
-
-    _store = Redux.createStore(reducer, metaData.initialState);
-
-    // These must be called after the store is setup so that the subscribers can be attached
-    _setupEventListeners(metaData);
-    _store.subscribe(_subscriber());
+    if(_metaData.reducer) {
+      _reducer = metaData.reducer;
+    }
+    _createStore();
   }
 
-  // This is done to make sure that the page elements are ready
-  setTimeout(function () {
-    _store = Redux.createStore(_metaData.reducer, _metaData.initialState);
-  });
+  var setReducer = function(reducer) {
+    _reducer = reducer;
+    _createStore();
+  }
+
+  // Make sure that we have both a reducer and the meta data before creating the store
+  var _createStore = function() {
+    if(_reducer && _metaData) {
+      _store = Redux.createStore(_reducer, _metaData.initialState);
+
+      // These must be called after the store is setup so that the subscribers can be attached
+      _setupEventListeners(_metaData);
+
+      // An internal subscriber is used so that we can use a state selector before pasing to the subscribers
+      _store.subscribe(_subscriber());
+    }
+  }
 
   var _setupEventListeners = function(metaData) {
     if(metaData && metaData.events) {
@@ -37,7 +48,7 @@ var reduxGlue = (function() {
             action = metaEvent.actionCreator();
           }
 
-          // Dispatch the action with the event data
+          // Dispatch the action with the event data detail
           store.dispatch(action);
         });
       });
@@ -57,18 +68,30 @@ var reduxGlue = (function() {
               data = subscriber.stateSelector(state);
             }
 
-            // Use the callback function if provided
-            if(subscriber.callbackFn) {
-              subscriber.callbackFn(data);
-            } else {
-              // Select the element and call the function name
-              var el = subscriber.context.querySelector(subscriber.elName);
-              if(el && el != null) {
-                var el = subscriber.context.querySelector(subscriber.elName);
-                  el[subscriber.propName] = data;
+            // Determine what the user has provided for a callback
+            if(subscriber.callbackInfo) {
+              if(typeof subscriber.callbackInfo === 'function') {
+                // Call the function
+                subscriber.callbackInfo(data);
               } else {
-                throw 'Cannot notify subscriber:"' + subscriber.name + '" because the calback selector element named:"' + subscriber.elName + '" did not find the element';
+                // Now check to see that we have both a selector and a property
+                var selectorParts = subscriber.callbackInfo.split(".");
+
+                if(selectorParts.length === 2) {
+                  // Select the element and call the function name
+                  var el = subscriber.context.querySelector(selectorParts[0]);
+                  if(el && el != null) {
+                    var el = subscriber.context.querySelector(subscriber.elName);
+                      el[selectorParts[1]] = data;
+                  } else {
+                    throw 'Cannot notify subscriber:"' + subscriber.name + '" because the calback selector element named:"' + subscriber.elName + '" did not find the element';
+                  }
+                } else {
+                  throw 'Missing property for the subscriber:"' + subscriber.name + '". The callbackInfo must have both a selector and a property of the form name.property';
+                }
               }
+            } else {
+              throw 'Missing callback information for subscriber:"' + subscriber.name + '"';
             }
           });
       }
@@ -77,6 +100,6 @@ var reduxGlue = (function() {
 
   return {
     setMetaData: setMetaData,
-    setReducer: function(reducer) {_reducer = reducer;}
+    setReducer: setReducer
   }
 })();
