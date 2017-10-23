@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>title</title>
+  </head>
+  <body>
+    <div>
+      <div>Select the person-component in advance and looping 1000 times takes: <span id="preSelect"></span> milliseconds
+      <div>Use querySelector the person-component 1000 times takes: <span id="selectEverytime"></span> milliseconds
+      <div id="perfTest">This is selected</div>
+    </div>
+
+    <script>
+      var start = Date.now();
+      perfDiv = document.querySelector('#perfTest');
+      for(var i=0; i < 1000000; i++) {
+        var text = perfDiv.textContent;
+      }
+      var end = Date.now();
+      document.querySelector('#preSelect').textContent = (end - start);
+
+      start = Date.now();
+      for(var i=0; i < 1000000; i++) {
+        var perfDiv = document.querySelector('#perfTest');
+        var text = perfDiv.textContent;
+      }
+      end = Date.now();
+      document.querySelector('#selectEverytime').textContent = (end - start);
+
+    </script>
+  </body>
+</html>
