@@ -1,0 +1,20 @@
+{
+	"id": 1,
+	"user": "Bob",
+	"role": "Architect",
+	"address": {
+		"street": "1234 MyWay",
+		"city": "Anywhere",
+		"state": "California",
+		"zip": "90210"
+	},
+	"contact" : {
+		"phone": {
+			"home": "(123) 456-7890",
+			"office": "(987) 6545-3210",
+			"cell": "(800) 555-6767"
+		},
+		"email": "john@doe.com",
+		"web": "www.johndoe.com"
+	}
+}
